@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Для тебе ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -18,6 +18,7 @@
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             background-color: #ffdde1;
             background-image: linear-gradient(0deg, #ffdde1 0%, #ee9ca7 100%);
+            /* Використовуємо Nunito як основний шрифт для сторінки */
             font-family: 'Nunito', sans-serif;
             overflow: hidden;
         }
@@ -34,8 +35,9 @@
         }
 
         h1 {
-            /* ЗМІНЕНО: Новий елегантний шрифт */
-            font-family: 'Playfair Display', serif;
+            /* ЗМІНЕНО: Застосував м'який шрифт Quicksand */
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700; /* Жирний напис для виразності */
             color: #d63384;
             font-size: 3rem;
             margin-bottom: 30px;
@@ -55,7 +57,6 @@
             gap: 20px;
             position: relative;
             min-height: 60px;
-            /* Важливо: дозволяє кнопці виходити за межі контейнера при русі */
             overflow: visible; 
         }
 
@@ -65,9 +66,9 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
+            /* Для кнопок залишаємо м'який Nunito */
             font-family: 'Nunito', sans-serif;
             font-weight: 700;
-            /* Забезпечує плавність трансформацій для обох кнопок */
             transition: transform 0.3s ease-out, background-color 0.2s;
         }
 
@@ -75,7 +76,7 @@
             background-color: #ff6b81;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
-            z-index: 2; /* Кнопка "Так" завжди зверху */
+            z-index: 2;
         }
 
         .btn-yes:hover {
@@ -89,7 +90,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1;
-            /* ЗМІНЕНО: Прибрано переходи для left/top, залишено тільки transform */
         }
 
     </style>
@@ -113,7 +113,6 @@
         const buttonsDiv = document.querySelector('.buttons');
         
         let scaleSize = 1; 
-        // ЗМІНЕНО: Додано змінні для відстеження поточного зміщення
         let currentX = 0;
         let currentY = 0;
 
@@ -121,18 +120,14 @@
             scaleSize -= 0.02;
             if (scaleSize < 0) scaleSize = 0; 
 
-            const moveRange = 200; // Радіус руху
+            const moveRange = 200;
 
-            // Генеруємо випадкове зміщення відносно поточного положення
             let offsetX = (Math.random() - 0.5) * moveRange * 2;
             let offsetY = (Math.random() - 0.5) * moveRange * 2;
 
-            // Оновлюємо загальні координати
             currentX += offsetX;
             currentY += offsetY;
 
-            // ЗМІНЕНО: Використовуємо translate для плавного руху без стрибків
-            // Це рухає кнопку від її початкової позиції
             noBtn.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scaleSize})`;
         }
 
