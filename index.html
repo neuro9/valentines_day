@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Для тебе ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -34,7 +34,8 @@
         }
 
         h1 {
-            font-family: 'Pacifico', cursive;
+            /* ЗМІНЕНО: Новий елегантний шрифт */
+            font-family: 'Playfair Display', serif;
             color: #d63384;
             font-size: 3rem;
             margin-bottom: 30px;
@@ -54,6 +55,8 @@
             gap: 20px;
             position: relative;
             min-height: 60px;
+            /* Важливо: дозволяє кнопці виходити за межі контейнера при русі */
+            overflow: visible; 
         }
 
         button {
@@ -64,13 +67,15 @@
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
             font-weight: 700;
+            /* Забезпечує плавність трансформацій для обох кнопок */
+            transition: transform 0.3s ease-out, background-color 0.2s;
         }
 
         .btn-yes {
             background-color: #ff6b81;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
-            transition: transform 0.2s, background-color 0.2s;
+            z-index: 2; /* Кнопка "Так" завжди зверху */
         }
 
         .btn-yes:hover {
@@ -83,8 +88,8 @@
             color: #57606f;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             position: relative;
-            /* ОСНОВНА ЗМІНА: Плавний перехід для руху */
-            transition: left 0.3s ease-out, top 0.3s ease-out, transform 0.2s; 
+            z-index: 1;
+            /* ЗМІНЕНО: Прибрано переходи для left/top, залишено тільки transform */
         }
 
     </style>
@@ -93,7 +98,7 @@
 
     <div class="container">
         <h1 id="question">Чи будеш ти моєю валентинкою?</h1>
-        <p id="success-message" class="message">Ура! Ти зробила мене найщасливішим! ❤️<br>Чекаю на наше побачення в OASIS!<br>До речі, заглянь під подушку🤭</p>
+        <p id="success-message" class="message">Ура! Ти зробила мене найщасливішим! ❤️<br>Чекаю на наше побачення в fifi!<br>До речі, заглянь під подушку🤭</p>
         
         <div class="buttons">
             <button class="btn-yes" onclick="acceptLove()">Так</button>
@@ -108,40 +113,27 @@
         const buttonsDiv = document.querySelector('.buttons');
         
         let scaleSize = 1; 
+        // ЗМІНЕНО: Додано змінні для відстеження поточного зміщення
+        let currentX = 0;
+        let currentY = 0;
 
         function moveButton() {
-            // ЗМІНА 1: Дуже повільне зменшення (на 2% за раз)
             scaleSize -= 0.02;
             if (scaleSize < 0) scaleSize = 0; 
 
-            // Отримуємо поточні координати кнопки
-            const btnRect = noBtn.getBoundingClientRect();
-            
-            // ЗМІНА 2: Логіка "коротких ривків"
-            // Замість випадкового місця на всьому екрані, ми зсуваємо кнопку 
-            // на відстань до 250px від поточного місця.
-            
-            const moveRange = 250; // Максимальна відстань стрибка в пікселях
-            
-            // Генеруємо зміщення (від -moveRange до +moveRange)
+            const moveRange = 200; // Радіус руху
+
+            // Генеруємо випадкове зміщення відносно поточного положення
             let offsetX = (Math.random() - 0.5) * moveRange * 2;
             let offsetY = (Math.random() - 0.5) * moveRange * 2;
 
-            // Розраховуємо нові координати
-            let newX = btnRect.left + offsetX;
-            let newY = btnRect.top + offsetY;
+            // Оновлюємо загальні координати
+            currentX += offsetX;
+            currentY += offsetY;
 
-            // Перевірка, щоб кнопка не вилетіла за межі екрану
-            if (newX < 10) newX = 10;
-            if (newX > window.innerWidth - 100) newX = window.innerWidth - 100;
-            if (newY < 10) newY = 10;
-            if (newY > window.innerHeight - 50) newY = window.innerHeight - 50;
-
-            // Застосовуємо стилі
-            noBtn.style.position = 'fixed'; 
-            noBtn.style.left = newX + 'px';
-            noBtn.style.top = newY + 'px';
-            noBtn.style.transform = `scale(${scaleSize})`;
+            // ЗМІНЕНО: Використовуємо translate для плавного руху без стрибків
+            // Це рухає кнопку від її початкової позиції
+            noBtn.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scaleSize})`;
         }
 
         function acceptLove() {
